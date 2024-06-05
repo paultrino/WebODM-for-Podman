@@ -1,3 +1,44 @@
+# WebODM changes to enable Podman
+WebODM does not officially support Podman (a more secure docker alternative), therefore I have made two changes to the project to allow for Podman Deployment: 
+
+## 1) Change to `docker-compose.yml`
+It seems the the `.env` values were not being passed to the `webapp` and `worker`, and required adding them explicitly:  
+
+> @see https://github.com/OpenDroneMap/WebODM/issues/1161#issuecomment-1722589656
+>
+> Hi @Majstor, I had the same problem with podman-compose and I just added the `env_file` attribute to the docker-compose.yml services `webapp` and `worker` like this:
+> 
+> ```
+> # docker-compose.yml
+> ...
+> db:
+>     image: docker.io/opendronemap/webodm_db
+>     ...
+> broker:
+>     image: docker.io/redis:7.0.10
+>     ...
+> 
+> webapp:
+>     ...
+>     image: docker.io/opendronemap/webodm_webapp
+>     env_file:
+>       - .env
+>     ...
+> 
+> worker:
+>     ...
+>     image: docker.io/opendronemap/webodm_webapp
+>     env_file:
+>       - .env
+>     ...
+> ```
+> 
+> this way you set the `WO_BROKER` value to `redis://broker` from the `.env` file. I hope this works for you, too. Additionally you can add the prefix docker.io like: `image: docker.io/<image_name>` to the docker-compose image paths.
+
+## 2) Changes in `webodm.sh`
+The use of my system-level `docker-compose` alias triggers an OCI permissions error, but if I swap over the references in `webodm.sh` from `docker-compose` or `docker compose` to `podman-compose` and `podman compose` respectively, it works correctly.
+
+# WebODM Documentation
 <img alt="WebODM" src="https://user-images.githubusercontent.com/1951843/34074943-8f057c3c-e287-11e7-924d-3ccafa60c43a.png" width="180">
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/OpenDroneMap/WebODM/build-and-publish.yml?branch=master) ![Version](https://img.shields.io/github/v/release/OpenDroneMap/WebODM) [![Translated](https://hosted.weblate.org/widgets/webodm/-/svg-badge.svg)](https://hosted.weblate.org/engage/webodm/)
@@ -6,29 +47,35 @@ A user-friendly, commercial grade software for drone image processing. Generate 
 
 ![image](https://user-images.githubusercontent.com/1951843/174504753-6869e56e-7b65-4775-bb23-6c1dc256575c.png)
 
-* [Getting Started](#getting-started)
-    * [Manage Processing Nodes](#manage-processing-nodes)
-    * [Enable MicMac](#enable-micmac)
-    * [Enable SSL](#enable-ssl)
-    * [Where Are My Files Stored?](#where-are-my-files-stored)
-    * [Common Troubleshooting](#common-troubleshooting)
-    * [Backup and Restore](#backup-and-restore)
-    * [Reset Password](#reset-password)
-    * [Manage Plugins](#manage-plugins)
-    * [Update](#update)
- * [Recommended Machine Specs](#recommended-machine-specs)
- * [Customizing and Extending](#customizing-and-extending)
- * [API Docs](#api-docs)
- * [Roadmap](#roadmap)
- * [Getting Help](#getting-help)
- * [Support the Project](#support-the-project)
- * [Translations](#translations)
- * [Become a Contributor](#become-a-contributor)
- * [Architecture Overview](#architecture-overview)
- * [Run the docker version as a Linux Service](#run-the-docker-version-as-a-linux-service)
- * [Run it natively](#run-it-natively)
- * [Run it on the cloud (Google Compute, Amazon AWS)](#run-it-on-the-cloud-google-compute-amazon-aws)
- * [License](#license)
+- [WebODM changes to enable Podman](#webodm-changes-to-enable-podman)
+  - [1) Change to `docker-compose.yml`](#1-change-to-docker-composeyml)
+  - [2) Changes in `webodm.sh`](#2-changes-in-webodmsh)
+- [WebODM Documentation](#webodm-documentation)
+  - [Getting Started](#getting-started)
+    - [Manage Processing Nodes](#manage-processing-nodes)
+    - [Enable MicMac](#enable-micmac)
+    - [Enable SSL](#enable-ssl)
+    - [Where Are My Files Stored?](#where-are-my-files-stored)
+    - [Common Troubleshooting](#common-troubleshooting)
+      - [Images Missing from Lightning Assets](#images-missing-from-lightning-assets)
+    - [Backup and Restore](#backup-and-restore)
+    - [Reset Password](#reset-password)
+    - [Manage Plugins](#manage-plugins)
+    - [Update](#update)
+  - [Recommended Machine Specs](#recommended-machine-specs)
+  - [Customizing and Extending](#customizing-and-extending)
+  - [API Docs](#api-docs)
+  - [Roadmap](#roadmap)
+  - [Getting Help](#getting-help)
+  - [Support the Project](#support-the-project)
+  - [Translations](#translations)
+  - [Become a Contributor](#become-a-contributor)
+  - [Architecture Overview](#architecture-overview)
+  - [Run the docker version as a Linux Service](#run-the-docker-version-as-a-linux-service)
+  - [Run it natively](#run-it-natively)
+  - [Run it on the cloud (Google Compute, Amazon AWS)](#run-it-on-the-cloud-google-compute-amazon-aws)
+  - [License](#license)
+  - [Trademark](#trademark)
  
 ![image](https://user-images.githubusercontent.com/1951843/174504771-b0bcfd29-3960-41f7-8d44-103b63050bd5.png)
 
