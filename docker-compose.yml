@@ -36,6 +36,8 @@ services:
       - WO_SECRET_KEY
     restart: unless-stopped
     oom_score_adj: 0
+    env_file:
+      - .env
   broker:
     image: redis:7.0.10
     container_name: broker
@@ -56,3 +58,5 @@ services:
       - WO_SECRET_KEY
     restart: unless-stopped
     oom_score_adj: 250
+    env_file:
+      - .env
