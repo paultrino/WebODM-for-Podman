@@ -1,5 +1,9 @@
-# WebODM changes to enable Podman
-WebODM does not officially support Podman (a more secure docker alternative), therefore I have made two changes to the project to allow for Podman Deployment: 
+# WEB-ODM FOR PODMAN
+This is a forked repository. Please read the following note...
+
+## UPDATE FOR ENABLE PODMAN > JUNE 2024 >  From Paul W
+
+WebODM does not officially support Podman (a more secure docker alternative), therefore I have made two changes to the project to allow for Podman Deployment, both of which are documented in more detail below: 1) docker-compose's `.env` file needed to be changed, and 2) webodm.sh needed to be changed to reference podman explicitly.
 
 ## 1) Change to `docker-compose.yml`
 It seems the the `.env` values were not being passed to the `webapp` and `worker`, and required adding them explicitly:  
@@ -47,7 +51,8 @@ A user-friendly, commercial grade software for drone image processing. Generate 
 
 ![image](https://user-images.githubusercontent.com/1951843/174504753-6869e56e-7b65-4775-bb23-6c1dc256575c.png)
 
-- [WebODM changes to enable Podman](#webodm-changes-to-enable-podman)
+- [WEB-ODM FOR PODMAN](#web-odm-for-podman)
+  - [UPDATE FOR ENABLE PODMAN \> JUNE 2024 \>  From Paul W](#update-for-enable-podman--june-2024---from-paul-w)
   - [1) Change to `docker-compose.yml`](#1-change-to-docker-composeyml)
   - [2) Changes in `webodm.sh`](#2-changes-in-webodmsh)
 - [WebODM Documentation](#webodm-documentation)
